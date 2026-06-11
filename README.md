@@ -195,8 +195,8 @@ demo host supports.
 
 ## 8. Optional: Remote Access And `bastion client`
 
-If Bastion runs on a remote Linux server, expose the host
-API through your private network. With Tailscale Serve on the Bastion host:
+If Bastion runs on a remote Linux server, you can drive it from your local machine
+by exposing the host API through a private network with Tailscale.
 
 ```sh
 tailscale serve --bg localhost:3148
