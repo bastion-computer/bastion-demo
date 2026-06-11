@@ -1,13 +1,13 @@
 # Bastion Demo Tracker
 
-This repository is a small issue tracker for Bastion demos. It is intentionally
-simple: Bun, TypeScript, a tiny HTTP API, static frontend files, JSON file
-storage, and no external package dependencies.
+This repository is a small issue tracker to showcase Bastion features. It is
+intentionally simple: Bun, TypeScript, a tiny HTTP API, static frontend files,
+JSON file storage, and no external package dependencies.
 
-Use it to demonstrate how Bastion turns one prepared coding environment into many
+Use it to see how Bastion turns one prepared coding environment into many
 isolated environments for parallel agent work.
 
-## What You Will Demo
+## What You Will Do
 
 - Install and prepare Bastion on a Linux host.
 - Create a reusable Bastion template for a Bun and TypeScript project.
@@ -31,11 +31,11 @@ Open `http://localhost:3000` to use the tracker. The app creates
 
 Useful scripts:
 
-| Command         | Description                         |
-| --------------- | ----------------------------------- |
-| `bun run start` | Start the HTTP server.              |
-| `bun run dev`   | Start the server in watch mode.     |
-| `bun test`      | Run store and API tests with Bun.   |
+| Command         | Description                       |
+| --------------- | --------------------------------- |
+| `bun run start` | Start the HTTP server.            |
+| `bun run dev`   | Start the server in watch mode.   |
+| `bun test`      | Run store and API tests with Bun. |
 
 ## Repository Layout
 
@@ -73,11 +73,17 @@ bastion system add cloud-hypervisor --with-utilities
 
 ## 2. Configure The Agent Provider
 
-The included template configures OpenCode with OpenAI credentials from the host
-environment:
+The included template configures OpenCode with OpenAI credentials from environment
+variables in `/etc/default/bastion`. Add the following line to the file.
+
+```
+OPENAI_API_KEY=sk_xxxxxx
+```
+
+And then restart bastion services.
 
 ```sh
-export OPENAI_API_KEY=sk_xxxxxx
+sudo systemctl restart bastiond.service bastion-api.service
 ```
 
 If you use another provider, edit `bastion/template.json` before creating the
@@ -101,9 +107,6 @@ The template currently clones:
 ```text
 https://github.com/bastion-computer/bastion-demo.git
 ```
-
-If you fork or rename the repository, update the clone URL in
-`bastion/template.json` first.
 
 ## 4. Create Parallel Environments
 
@@ -147,9 +150,9 @@ Open Bastion's tmux environment picker:
 bastion mux
 ```
 
-In the tmux session, create a new tab, select one of the `demo-*` environments,
+In the tmux session, create a new tab (`ctrl + b & c`), select one of the `demo-*` environments,
 then choose either `SSH` or `OpenCode`. This is the fastest way to move between
-parallel environments during a live demo.
+parallel environments.
 
 ## 6. Run Parallel Coding Sessions
 
@@ -165,34 +168,6 @@ Example session map:
 | `demo-labels`   | `prompts/03-add-labels-feature.md`       | Add a product feature.            |
 | `demo-tests`    | `prompts/04-add-api-tests.md`            | Expand test coverage.             |
 | `demo-search`   | `prompts/05-add-search-filter.md`        | Improve the frontend.             |
-
-Attach OpenCode to each environment from separate terminals:
-
-```sh
-bastion opencode --key demo-fix-bug
-bastion opencode --key demo-refactor
-bastion opencode --key demo-labels
-bastion opencode --key demo-tests
-bastion opencode --key demo-search
-```
-
-You can also launch these sessions through `bastion mux` and keep them in one
-tmux session.
-
-Suggested workflow for each session:
-
-```sh
-bun test
-git status --short
-```
-
-Then paste the relevant prompt file into OpenCode. When an agent finishes, verify
-inside that environment:
-
-```sh
-bun test
-git diff
-```
 
 Because each environment has its own VM, file system, process tree, and package
 state, these sessions can run at the same time without sharing ports or mutating
@@ -218,9 +193,9 @@ For frontend changes, ask the agent to rely on code review and targeted tests, o
 open an interactive shell and use whatever browser or forwarding workflow your
 demo host supports.
 
-## 8. Remote Access And `bastion client`
+## 8. Optional: Remote Access And `bastion client`
 
-If Bastion runs on a Linux host but you drive it from a laptop, expose the host
+If Bastion runs on a remote Linux server, expose the host
 API through your private network. With Tailscale Serve on the Bastion host:
 
 ```sh
@@ -242,18 +217,6 @@ bastion env list --tag demo
 bastion opencode --key demo-fix-bug
 ```
 
-You can also skip persisted config and pass the URL for one command:
-
-```sh
-bastion --api-url https://bastion-host.example.ts.net env list --tag demo
-```
-
-Remove the persisted remote URL when you want to return to the local default:
-
-```sh
-bastion client remove api-url
-```
-
 ## 9. Clean Up
 
 Remove demo environments:
@@ -271,12 +234,3 @@ Remove the template if you no longer need it:
 ```sh
 bastion templates remove --key bastion-demo
 ```
-
-## Notes For Demo Authors
-
-- Keep this repo dependency-free so template creation stays fast.
-- Keep prompts small and independent so each one fits a parallel environment.
-- If you add dependencies later, commit the updated Bun lockfile and keep
-  `bastion/template.json` using `bun install --frozen-lockfile`.
-- If the public GitHub repo moves, update both `bastion/template.json` and any
-  docs that link to it.
