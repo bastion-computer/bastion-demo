@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Bastion Demo Tracker</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="hero">
+        <p class="eyebrow">Bastion demo app</p>
+        <h1>Track small issues while coding agents work in parallel.</h1>
+        <p>
+          This dependency-free Bun and TypeScript app is intentionally small so it
+          is easy to clone into many isolated Bastion environments.
+        </p>
+      </section>
+
+      <section class="summary" aria-label="Issue summary">
+        <article>
+          <span id="total-count">0</span>
+          <strong>Total</strong>
+        </article>
+        <article>
+          <span id="open-count">0</span>
+          <strong>Open</strong>
+        </article>
+        <article>
+          <span id="done-count">0</span>
+          <strong>Done</strong>
+        </article>
+      </section>
+
+      <section class="workspace">
+        <form id="issue-form" class="panel">
+          <h2>Create issue</h2>
+          <label>
+            Title
+            <input name="title" placeholder="Add quick filters" required />
+          </label>
+          <label>
+            Description
+            <textarea name="description" rows="4" placeholder="What needs to change?"></textarea>
+          </label>
+          <div class="field-row">
+            <label>
+              Priority
+              <select name="priority">
+                <option value="low">Low</option>
+                <option value="medium" selected>Medium</option>
+                <option value="high">High</option>
+              </select>
+            </label>
+            <label>
+              Assignee
+              <input name="assignee" placeholder="Agent name" />
+            </label>
+          </div>
+          <button type="submit">Add issue</button>
+          <p id="form-error" role="alert"></p>
+        </form>
+
+        <section class="panel issue-list-panel">
+          <div class="list-header">
+            <div>
+              <h2>Issues</h2>
+              <p>Move cards through the workflow as agents make changes.</p>
+            </div>
+            <select id="status-filter" aria-label="Filter by status">
+              <option value="all">All</option>
+              <option value="todo">Todo</option>
+              <option value="in-progress">In progress</option>
+              <option value="done">Done</option>
+            </select>
+          </div>
+          <div id="issue-list" class="issue-list"></div>
+        </section>
+      </section>
+    </main>
+
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>
