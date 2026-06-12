@@ -4,6 +4,9 @@
     "memory": 2,
     "volume": 20
   },
+  "tunnel": {
+    "tracker": 3000
+  },
   "agents": {
     "opencode": {
       "working_directory": "/workspace/bastion-demo",
