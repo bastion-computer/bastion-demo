@@ -135,26 +135,21 @@ Run a quick command inside one environment:
 bastion ssh --key demo-fix-bug -- 'cd /workspace/bastion-demo && bun test'
 ```
 
-Open an interactive shell in the repo directory:
-
-```sh
-bastion ssh --key demo-fix-bug
-```
-
-The shell starts in `/workspace/bastion-demo` because the template uses the
-`set_default_ssh_directory` action.
-
 ## 5. Use Bastion Mux
 
-Open Bastion's tmux environment picker:
+Using Bastion's built in multiplexer is the fastest way to move between parallel
+environments. However, it does require a [tmux](https://github.com/tmux/tmux/wiki/Installing)
+dependency on your system.
 
 ```sh
 bastion mux
 ```
 
-In the tmux session, create a new tab (`ctrl + b & c`), select one of the `demo-*` environments,
-then choose either `SSH` or `OpenCode`. This is the fastest way to move between
-parallel environments.
+In the tmux session, you can create a new tabs with `ctrl + b & c`, select one of
+the `demo-*` environments, then choose either `SSH` or `OpenCode`.
+
+Bastion mux uses default `tmux` shortcuts. Refer to the [tmux cheat sheet](https://tmuxcheatsheet.com/)
+if you are unfamiliar.
 
 ## 6. Run Parallel Coding Sessions
 
@@ -178,34 +173,22 @@ each other's working copies.
 ## 7. Preview The App With Tunnels
 
 The template registers a Bastion tunnel named `tracker` for port `3000` inside
-each environment. Start the app in one environment and keep the command running:
+each environment. Open a new Bastion mux tab and connect to `demo-fix-bug` via ssh.
+In this pane, start the dev server:
 
 ```sh
-bastion ssh --key demo-fix-bug -- 'cd /workspace/bastion-demo && bun run start'
+bun run dev
 ```
 
-In another terminal, ask Bastion for that environment's tunnel URLs:
+Since this server is running inside a VM, we will need to use a local proxy to
+route requests to a Bastion tunnel. In a separate terminal run:
 
 ```sh
-bastion env tunnels --key demo-fix-bug
+bastion env proxy --env-key demo-fix-bug --name tracker
 ```
 
-The response includes a URL for the `tracker` tunnel:
-
-```json
-{
-  "entries": [
-    {
-      "name": "tracker",
-      "port": 3000,
-      "url": "http://localhost:3148/v1/environments/env_xxxxxx/tunnel/tracker"
-    }
-  ]
-}
-```
-
-Open the `url` in a browser on the Bastion host to use the tracker running inside
-the VM. You can also append API paths to the same tunnel URL, such as
+Open the given `url` in a browser on your host to use the tracker running inside
+the VM. You can also append API paths to the same proxy URL, such as
 `/api/health` or `/api/issues`.
 
 Each `demo-*` environment gets its own `tracker` tunnel, so multiple
