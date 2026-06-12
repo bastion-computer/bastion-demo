@@ -208,8 +208,7 @@ Open the `url` in a browser on the Bastion host to use the tracker running insid
 the VM. You can also append API paths to the same tunnel URL, such as
 `/api/health` or `/api/issues`.
 
-The app can keep listening on guest `localhost:3000`; it does not need to bind to
-`0.0.0.0`. Each `demo-*` environment gets its own `tracker` tunnel, so multiple
+Each `demo-*` environment gets its own `tracker` tunnel, so multiple
 agents can run the same app port at the same time without colliding.
 
 ## 8. Optional: Remote Access And `bastion client`
