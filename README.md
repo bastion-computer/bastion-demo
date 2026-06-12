@@ -132,7 +132,7 @@ bastion env list --tag demo
 Run a quick command inside one environment:
 
 ```sh
-bastion ssh --key demo-fix-bug -- sh -lc 'cd /workspace/bastion-demo && bun test'
+bastion ssh --key demo-fix-bug -- 'cd /workspace/bastion-demo && bun test'
 ```
 
 Open an interactive shell in the repo directory:
@@ -181,7 +181,7 @@ The template registers a Bastion tunnel named `tracker` for port `3000` inside
 each environment. Start the app in one environment and keep the command running:
 
 ```sh
-bastion ssh --key demo-fix-bug -- sh -lc 'cd /workspace/bastion-demo && bun run start'
+bastion ssh --key demo-fix-bug -- 'cd /workspace/bastion-demo && bun run start'
 ```
 
 In another terminal, ask Bastion for that environment's tunnel URLs:
