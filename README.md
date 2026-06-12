@@ -14,6 +14,7 @@ isolated environments for parallel agent work.
 - Launch multiple environments from the same template.
 - Attach to environments with `bastion ssh`, `bastion opencode`, and `bastion mux`.
 - Run several coding agents in parallel with concrete prompts.
+- Preview an environment's web app through a Bastion tunnel.
 - Configure a remote CLI with `bastion client` commands.
 
 ## Local App Usage
@@ -100,7 +101,8 @@ bastion templates create --key bastion-demo --file bastion/template.json
 
 Template creation boots a temporary VM, installs Bun, installs `git`, clones this
 repo, runs `bun install --frozen-lockfile`, runs `bun test`, snapshots the VM, and
-stores the prepared template.
+stores the prepared template. The template also registers a `tracker` tunnel for
+the app's guest-local port `3000`.
 
 The template currently clones:
 
@@ -173,25 +175,42 @@ Because each environment has its own VM, file system, process tree, and package
 state, these sessions can run at the same time without sharing ports or mutating
 each other's working copies.
 
-## 7. Touch The App Over SSH
+## 7. Preview The App With Tunnels
 
-The app listens on port `3000` inside the environment. For quick API checks, run
-commands inside the VM:
+The template registers a Bastion tunnel named `tracker` for port `3000` inside
+each environment. Start the app in one environment and keep the command running:
 
 ```sh
 bastion ssh --key demo-fix-bug -- bun run start
 ```
 
-In another SSH session to the same environment:
+In another terminal, ask Bastion for that environment's tunnel URLs:
 
 ```sh
-bastion ssh --key demo-fix-bug -- curl -fsS http://localhost:3000/api/health
-bastion ssh --key demo-fix-bug -- curl -fsS http://localhost:3000/api/issues
+bastion env tunnels --key demo-fix-bug
 ```
 
-For frontend changes, ask the agent to rely on code review and targeted tests, or
-open an interactive shell and use whatever browser or forwarding workflow your
-demo host supports.
+The response includes a URL for the `tracker` tunnel:
+
+```json
+{
+  "entries": [
+    {
+      "name": "tracker",
+      "port": 3000,
+      "url": "http://localhost:3148/v1/environments/env_xxxxxx/tunnel/tracker"
+    }
+  ]
+}
+```
+
+Open the `url` in a browser on the Bastion host to use the tracker running inside
+the VM. You can also append API paths to the same tunnel URL, such as
+`/api/health` or `/api/issues`.
+
+The app can keep listening on guest `localhost:3000`; it does not need to bind to
+`0.0.0.0`. Each `demo-*` environment gets its own `tracker` tunnel, so multiple
+agents can run the same app port at the same time without colliding.
 
 ## 8. Optional: Remote Access And `bastion client`
 
