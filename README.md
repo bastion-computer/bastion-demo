@@ -184,7 +184,7 @@ Since this server is running inside a VM, we will need to use a local proxy to
 route requests to a Bastion tunnel. In a separate terminal run:
 
 ```sh
-bastion env proxy --env-key demo-fix-bug --name tracker
+bastion proxy --env-key demo-fix-bug --name tracker
 ```
 
 Open the given `url` in a browser on your host to use the tracker running inside
