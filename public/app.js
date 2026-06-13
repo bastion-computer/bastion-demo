@@ -91,16 +91,20 @@ function renderIssues() {
 
 function renderIssue(issue) {
   return `
-    <article class="issue-card priority-${issue.priority}">
-      <div>
-        <p class="issue-meta">${issue.id} · ${label(issue.status)} · ${label(issue.priority)}</p>
+    <article class="issue-card">
+      <div class="issue-content">
+        <div class="issue-meta">
+          <span class="issue-id">${issue.id}</span>
+          <span class="badge status-${issue.status}">${label(issue.status)}</span>
+          <span class="badge priority-${issue.priority}">${label(issue.priority)}</span>
+        </div>
         <h3>${escapeHtml(issue.title)}</h3>
-        <p>${escapeHtml(issue.description || "No description yet.")}</p>
-        ${issue.assignee ? `<span class="assignee">${escapeHtml(issue.assignee)}</span>` : ""}
+        <p class="issue-description">${escapeHtml(issue.description || "No description yet.")}</p>
+        ${issue.assignee ? `<span class="assignee">Assigned to ${escapeHtml(issue.assignee)}</span>` : ""}
       </div>
       <div class="card-actions">
         <button type="button" data-action="advance" data-id="${issue.id}">${advanceLabel(issue.status)}</button>
-        <button type="button" class="ghost" data-action="delete" data-id="${issue.id}">Delete</button>
+        <button type="button" class="ghost destructive" data-action="delete" data-id="${issue.id}">Delete</button>
       </div>
     </article>
   `;

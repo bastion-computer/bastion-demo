@@ -9,12 +9,8 @@
   <body>
     <main class="shell">
       <section class="hero">
-        <p class="eyebrow">Bastion demo app</p>
-        <h1>Track small issues while coding agents work in parallel.</h1>
-        <p>
-          This dependency-free Bun and TypeScript app is intentionally small so it
-          is easy to clone into many isolated Bastion environments.
-        </p>
+        <h1>Issue tracker</h1>
+        <p>Create, triage, and move issues through a simple workflow.</p>
       </section>
 
       <section class="summary" aria-label="Issue summary">
@@ -37,11 +33,15 @@
           <h2>Create issue</h2>
           <label>
             Title
-            <input name="title" placeholder="Add quick filters" required />
+            <input name="title" placeholder="Add a title" required />
           </label>
           <label>
             Description
-            <textarea name="description" rows="4" placeholder="What needs to change?"></textarea>
+            <textarea
+              name="description"
+              rows="4"
+              placeholder="What needs to change?"
+            ></textarea>
           </label>
           <div class="field-row">
             <label>
@@ -57,7 +57,7 @@
               <input name="assignee" placeholder="Agent name" />
             </label>
           </div>
-          <button type="submit">Add issue</button>
+          <button type="submit">Create issue</button>
           <p id="form-error" role="alert"></p>
         </form>
 
