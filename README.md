@@ -146,7 +146,7 @@ dependency on your system.
 bastion mux
 ```
 
-In the tmux session, you can create a new tabs with `ctrl + b & c`, select one of
+In the tmux session, you can create new tabs with `ctrl + b & c`, select one of
 the `demo-*` environments, then choose either `SSH` or `OpenCode`.
 
 Bastion mux uses default `tmux` shortcuts. Refer to the [tmux cheat sheet](https://tmuxcheatsheet.com/)
