@@ -101,8 +101,9 @@ bastion templates create --key bastion-demo --file bastion/template.json
 
 Template creation boots a temporary VM, installs Bun, installs `git`, clones this
 repo, runs `bun install --frozen-lockfile`, runs `bun test`, snapshots the VM, and
-stores the prepared template. The template also registers a `tracker` tunnel for
-the app's guest-local port `3000`.
+stores the prepared template. When each environment starts, it pulls the latest
+repo changes and launches `bun run dev` in the background. The template also
+registers a `tracker` tunnel for the app's guest-local port `3000`.
 
 The template currently clones:
 
@@ -173,12 +174,8 @@ each other's working copies.
 ## 7. Preview The App With Tunnels
 
 The template registers a Bastion tunnel named `tracker` for port `3000` inside
-each environment. Open a new Bastion mux tab and connect to `demo-fix-bug` via ssh.
-In this pane, start the dev server:
-
-```sh
-bun run dev
-```
+each environment. The dev server starts automatically in the background when the
+environment starts.
 
 Since this server is running inside a VM, we will need to use a local proxy to
 route requests to a Bastion tunnel. In a separate terminal run:

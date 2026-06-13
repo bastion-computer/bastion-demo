@@ -54,7 +54,7 @@
         "working_directory": "/workspace/bastion-demo"
       },
       {
-        "run": "bun test",
+        "run": "nohup bun run dev > /tmp/bastion-demo-dev.log 2>&1 &",
         "working_directory": "/workspace/bastion-demo"
       }
     ]
