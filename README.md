@@ -133,7 +133,7 @@ bastion env list --tag demo
 Run a quick command inside one environment:
 
 ```sh
-bastion ssh --key demo-fix-bug -- sh -lc 'cd /workspace/bastion-demo && bun test'
+bastion ssh --key demo-fix-bug -- 'cd /workspace/bastion-demo && bun test'
 ```
 
 ## 5. Use Bastion Mux
