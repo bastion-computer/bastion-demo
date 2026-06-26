@@ -51,18 +51,18 @@ Useful scripts:
 
 ## 1. Install Bastion
 
-Bastion currently targets Linux hosts with x86_64 KVM support.
+Bastion currently targets Linux hosts with x86_64 KVM support. Check that
+KVM is available and the host exposes vsock for VM tunnel traffic:
 
-Install the `bastion` CLI, `bastiond`, and the systemd services:
+```sh
+ls -l /dev/kvm
+ls -l /dev/vhost-vsock
+```
+
+Install `bastion`, `bastion-guest-proxy`, and the systemd services:
 
 ```sh
 curl -fsSL https://bastion.computer/install.sh | bash
-```
-
-Check that the services are running:
-
-```sh
-sudo systemctl status bastiond.service bastion-api.service
 ```
 
 Prepare the host for Cloud Hypervisor environments:
@@ -72,24 +72,24 @@ bastion system check
 bastion system add cloud-hypervisor --with-utilities
 ```
 
-## 2. Configure The Agent Provider
-
-The included template configures OpenCode with OpenAI credentials from environment
-variables in `/etc/default/bastion`. Add the following line to the file.
-
-```
-OPENAI_API_KEY=sk_xxxxxx
-```
-
-And then restart bastion services.
+Check that the services are running:
 
 ```sh
-sudo systemctl restart bastiond.service bastion-api.service
+sudo systemctl status bastiond.service bastion-api.service
+```
+
+## 2. Configure The Agent Provider
+
+The included template configures OpenCode with an OpenAI key from Bastion
+secrets. Create the secret before registering the template:
+
+```sh
+bastion secrets create --key OPENAI_API_KEY --value sk_xxxxxx
 ```
 
 If you use another provider, edit `bastion/template.json` before creating the
-template. Update `agents.opencode.auth` and `agents.opencode.config.model` to
-match your provider.
+template. Create the matching Bastion secret, then update `agents.opencode.auth`
+and `agents.opencode.config.model` to match your provider.
 
 ## 3. Create A Template
 
@@ -133,7 +133,7 @@ bastion env list --tag demo
 Run a quick command inside one environment:
 
 ```sh
-bastion ssh --key demo-fix-bug -- 'cd /workspace/bastion-demo && bun test'
+bastion ssh --key demo-fix-bug -- sh -lc 'cd /workspace/bastion-demo && bun test'
 ```
 
 ## 5. Use Bastion Mux
@@ -146,8 +146,8 @@ dependency on your system.
 bastion mux
 ```
 
-In the tmux session, you can create new tabs with `ctrl + b & c`, select one of
-the `demo-*` environments, then choose either `SSH` or `OpenCode`.
+In the tmux session, create new tabs with `Ctrl-b c`, select one of the
+`demo-*` environments, then choose either `SSH` or `OpenCode`.
 
 Bastion mux uses default `tmux` shortcuts. Refer to the [tmux cheat sheet](https://tmuxcheatsheet.com/)
 if you are unfamiliar.
